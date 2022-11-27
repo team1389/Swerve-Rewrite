@@ -9,17 +9,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 
-    /**
-     * Initialize all systems here as public & static.
-     * Ex: public static System system = new System();
-     */
 
-
-    public static OI oi = new OI();
+    private OI oi;
 
 
     @Override
     public void robotInit() {
+        oi = new OI();
     }
 
     /**
