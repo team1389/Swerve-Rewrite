@@ -45,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.BR_ABS_REVERSED);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
+    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.driveKinematics,
             new Rotation2d(0));
 
     // We want to reset gyro on boot, but the gyro takes a bit to start, so wait one sec then do it (in seperate thread)

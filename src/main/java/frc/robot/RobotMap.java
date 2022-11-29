@@ -14,7 +14,7 @@ public class RobotMap {
     public static final class ModuleConstants {
         // Note: these are for the drive and turning motors
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(3);
-        public static final double DRIVE_GEAR_RATIO = 1;// TODO: Find this
+        public static final double DRIVE_GEAR_RATIO = 1 / 5.25;
         public static final double TURN_GEAR_RATIO = 1;// TODO: Find this
         public static final double DRIVE_ROTATIONS_TO_METERS = DRIVE_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
         public static final double TURNING_ROTATIONS_TO_RAD = TURN_GEAR_RATIO * 2 * Math.PI;
@@ -32,7 +32,7 @@ public class RobotMap {
         // Distance between front and back wheels (meters)
         public static final double ROBOT_LENGTH = 0.562991;
 
-        public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+        public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
                 new Translation2d(ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2),
                 new Translation2d(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2),
                 new Translation2d(-ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2),

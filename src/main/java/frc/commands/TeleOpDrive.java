@@ -65,7 +65,7 @@ public class TeleOpDrive extends CommandBase {
         }
 
         // 5. Convert chassis speeds to individual module states
-        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
         drivetrain.setModuleStates(moduleStates);
