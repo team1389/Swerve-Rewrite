@@ -15,11 +15,11 @@ public class RobotMap {
         // Note: these are for the drive and turning motors
         public static final double WHEEL_DIAMETER_METERS = Units.inchesToMeters(3);
         public static final double DRIVE_GEAR_RATIO = 1 / 5.25;
-        public static final double TURN_GEAR_RATIO = 1;// TODO: Find this
+        public static final double TURN_GEAR_RATIO = 1 / (5.33 * 7);
         public static final double DRIVE_ROTATIONS_TO_METERS = DRIVE_GEAR_RATIO * Math.PI * WHEEL_DIAMETER_METERS;
         public static final double TURNING_ROTATIONS_TO_RAD = TURN_GEAR_RATIO * 2 * Math.PI;
-        public static final double DRIVE_ROTATIONS_TO_METERS_PER_SEC = DRIVE_ROTATIONS_TO_METERS / 60;
-        public static final double TURNING_ROTATIONS_TO_RAD_PER_SEC = TURNING_ROTATIONS_TO_RAD / 60;
+        public static final double DRIVE_RPM_TO_METERS_PER_SEC = DRIVE_ROTATIONS_TO_METERS / 60;
+        public static final double TURNING_RPM_TO_RAD_PER_SEC = TURNING_ROTATIONS_TO_RAD / 60;
         public static final double P_TURNING = 0.5; // PID constant TODO: Tune this
     }
 

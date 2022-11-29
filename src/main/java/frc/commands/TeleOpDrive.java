@@ -48,10 +48,9 @@ public class TeleOpDrive extends CommandBase {
         turningSpeed = Math.abs(turningSpeed) > 0.03 ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother using the slew limiter
-        xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.MAX_METERS_PER_SEC;
-        ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.MAX_METERS_PER_SEC;
-        turningSpeed = turningLimiter.calculate(turningSpeed)
-                * DriveConstants.MAX_RADIANS_PER_SEC;
+        xSpeed = xLimiter.calculate(xSpeed * DriveConstants.MAX_METERS_PER_SEC);
+        ySpeed = yLimiter.calculate(ySpeed * DriveConstants.MAX_METERS_PER_SEC);
+        turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.MAX_RADIANS_PER_SEC);
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
@@ -67,7 +66,7 @@ public class TeleOpDrive extends CommandBase {
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-        // 6. Output each module states to wheels
+        // 6. Output all module states to wheels
         drivetrain.setModuleStates(moduleStates);
     }
 

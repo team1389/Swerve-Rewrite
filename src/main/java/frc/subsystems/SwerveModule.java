@@ -40,9 +40,9 @@ public class SwerveModule {
         turningEncoder = turningMotor.getEncoder();
 
         driveEncoder.setPositionConversionFactor(ModuleConstants.DRIVE_ROTATIONS_TO_METERS);
-        driveEncoder.setVelocityConversionFactor(ModuleConstants.DRIVE_ROTATIONS_TO_METERS_PER_SEC);
+        driveEncoder.setVelocityConversionFactor(ModuleConstants.DRIVE_RPM_TO_METERS_PER_SEC);
         turningEncoder.setPositionConversionFactor(ModuleConstants.TURNING_ROTATIONS_TO_RAD);
-        turningEncoder.setVelocityConversionFactor(ModuleConstants.TURNING_ROTATIONS_TO_RAD_PER_SEC);
+        turningEncoder.setVelocityConversionFactor(ModuleConstants.TURNING_RPM_TO_RAD_PER_SEC);
 
         turningPidController = new PIDController(ModuleConstants.P_TURNING, 0, 0);
 

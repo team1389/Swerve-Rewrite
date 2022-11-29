@@ -8,7 +8,7 @@ public class OI {
 
     private final Drivetrain drivetrain = new Drivetrain();
 
-    private XboxController driveController, manipController;
+    private XboxController driveController;
 
     public OI() {
         initControllers();
@@ -28,7 +28,6 @@ public class OI {
      */
     private void initControllers() {
         driveController = new XboxController(0);
-        manipController = new XboxController(1);
     }
 
 
