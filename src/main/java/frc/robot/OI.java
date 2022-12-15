@@ -2,11 +2,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.commands.TeleOpDrive;
+import frc.commands.Test;
 import frc.subsystems.Drivetrain;
 
 public class OI {
 
-    private final Drivetrain drivetrain = new Drivetrain();
+    public final Drivetrain drivetrain = new Drivetrain();
 
     private XboxController driveController;
 
@@ -21,6 +22,7 @@ public class OI {
             () -> driveController.getRightX(),
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
+        //drivetrain.setDefaultCommand(new Test(drivetrain, 0, 0.5, 0));
     }
 
     /**

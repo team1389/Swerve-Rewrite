@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.DriveConstants;
 
 public class Drivetrain extends SubsystemBase {
-    private final SwerveModule frontLeft = new SwerveModule(
+    public final SwerveModule frontLeft = new SwerveModule(
         DriveConstants.FL_DRIVE_PORT,
         DriveConstants.FL_TURN_PORT,
         DriveConstants.FL_DRIVE_REVERSED,
@@ -20,7 +20,7 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.FL_ABS_PORT,
         DriveConstants.FR_ABS_REVERSED);
 
-    private final SwerveModule frontRight = new SwerveModule(
+    public final SwerveModule frontRight = new SwerveModule(
         DriveConstants.FR_DRIVE_PORT,
         DriveConstants.FR_TURN_PORT,
         DriveConstants.FR_DRIVE_REVERSED,
@@ -28,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.FR_ABS_PORT,
         DriveConstants.FR_ABS_REVERSED);
 
-    private final SwerveModule backLeft = new SwerveModule(
+    public final SwerveModule backLeft = new SwerveModule(
         DriveConstants.BL_DRIVE_PORT,
         DriveConstants.BL_TURN_PORT,
         DriveConstants.BL_DRIVE_REVERSED,
@@ -36,7 +36,7 @@ public class Drivetrain extends SubsystemBase {
         DriveConstants.BL_ABS_PORT,
         DriveConstants.BL_ABS_REVERSED);
 
-    private final SwerveModule backRight = new SwerveModule(
+    public final SwerveModule backRight = new SwerveModule(
         DriveConstants.BR_DRIVE_PORT,
         DriveConstants.BR_TURN_PORT,
         DriveConstants.BR_DRIVE_REVERSED,

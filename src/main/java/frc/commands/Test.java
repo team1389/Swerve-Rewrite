@@ -15,6 +15,8 @@ public class Test extends CommandBase{
         this.xSpeed = xSpeed;
         this.ySpeed = ySpeed;
         this.turnSpeed = turnSpeed;
+
+        addRequirements(drivetrain);
     }
 
     @Override

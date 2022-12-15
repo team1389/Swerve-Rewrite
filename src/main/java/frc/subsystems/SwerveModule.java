@@ -12,7 +12,7 @@ import frc.robot.RobotMap.ModuleConstants;
 
 public class SwerveModule {
 
-    private final CANSparkMax driveMotor;
+    public final CANSparkMax driveMotor;
     private final CANSparkMax turningMotor;
 
     private final RelativeEncoder driveEncoder;
@@ -22,6 +22,8 @@ public class SwerveModule {
 
     private final CANCoder absoluteEncoder;
     private final boolean absoluteEncoderReversed;
+
+    public double targetAngle, targetSpeed;
 
     // Instatiate new module with given ports and inversions
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
@@ -96,7 +98,10 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
 
         // Set motors, using the turning pid controller for that motor
-        driveMotor.set(state.speedMetersPerSecond / DriveConstants.MAX_METERS_PER_SEC);
+        targetAngle = state.angle.getDegrees();
+        targetSpeed = state.speedMetersPerSecond;
+
+        driveMotor.set(targetSpeed / DriveConstants.MAX_METERS_PER_SEC);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
     }
 
