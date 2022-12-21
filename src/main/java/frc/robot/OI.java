@@ -22,7 +22,7 @@ public class OI {
             () -> driveController.getRightX(),
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
-        //drivetrain.setDefaultCommand(new Test(drivetrain, 0, 0.5, 0));
+        //drivetrain.setDefaultCommand(new Test(drivetrain, 0.5, 0, 0));
     }
 
     /**

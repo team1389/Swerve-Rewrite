@@ -51,10 +51,10 @@ public class RobotMap {
 
         // Sometimes encoders are mounted backwards based on robot design, this fixes
         // that although it's not a thing on stargazer
-        public static final boolean FL_TURN_REVERSED = false;
-        public static final boolean BL_TURN_REVERSED = false;
-        public static final boolean FR_TURN_REVERSED = false;
-        public static final boolean BR_TURN_REVERSED = false;
+        public static final boolean FL_TURN_REVERSED = true;
+        public static final boolean BL_TURN_REVERSED = true;
+        public static final boolean FR_TURN_REVERSED = true;
+        public static final boolean BR_TURN_REVERSED = true;
 
         public static final boolean FL_DRIVE_REVERSED = false;
         public static final boolean BL_DRIVE_REVERSED = false;
