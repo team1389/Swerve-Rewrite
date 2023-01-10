@@ -1,45 +1,51 @@
 package frc.subsystems;
 
+import java.util.List;
+
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class Vision extends SubsystemBase {
 
-    public PhotonCamera camera = new PhotonCamera("photonvision");
+    public PhotonCamera camera = new PhotonCamera("Microsoft Lifecam HD-3000");
     public PhotonPipelineResult result;
-    public PhotonTrackedTarget target;
+    public PhotonTrackedTarget bestTarget;
+    public List<PhotonTrackedTarget> targets;
+    public AprilTagFieldLayout aprilTagFieldLayout = new ApriltagFieldLayout(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile));
+
 
     
     boolean hasTarget = false;
 
     // Instatiate new module with given ports and inversions
     public Vision() {
-        getResult();
+        getPipelineResult();
     }
 
-    public PhotonPipelineResult getResult() {
+    public void getPipelineResult() {
         result = camera.getLatestResult();
-        return result;
     }
 
     public PhotonTrackedTarget getTarget() {
-        getResult();
-        if(result.hasTargets()) {
-            target = result.getBestTarget();
-            return target;
-        }
-        return null;
+        getPipelineResult();
+        if(hasTargets()) {
+            bestTarget = result.getBestTarget();
+            targets = result.getTargets()
+]        }
+        return bestTarget;
     }
 
     public int getFiducialID() {
         getTarget();
 
         if(result.hasTargets()) {
-            return target.getFiducialId();
+            return bestTarget.getFiducialId();
         }
         return 0;
     
@@ -47,7 +53,7 @@ public class Vision extends SubsystemBase {
 
 
     public boolean hasTargets() {
-        getResult();
+        getPipelineResult();
         return result.hasTargets();
     }
 
