@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap.DriveConstants;
@@ -48,6 +49,9 @@ public class Drivetrain extends SubsystemBase {
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.driveKinematics,
             new Rotation2d(0), getModulePositions());
+    
+    private final Field2d m_field = new Field2d();
+
 
     // We want to reset gyro on boot, but the gyro takes a bit to start, so wait one sec then do it (in seperate thread)
     public Drivetrain() {
@@ -58,6 +62,8 @@ public class Drivetrain extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+
+        SmartDashboard.putData("Field", m_field);
     }
 
     public void zeroHeading() {
@@ -85,6 +91,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), getModulePositions());
+        m_field.setRobotPose(odemeter.getPoseMeters());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
