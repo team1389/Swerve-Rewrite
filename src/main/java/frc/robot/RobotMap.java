@@ -32,6 +32,8 @@ public class RobotMap {
         // Distance between front and back wheels (meters)
         public static final double ROBOT_LENGTH = 0.562991;
 
+        // Note positive x is forward
+        // Wheel order: FR, FL, BR, BL
         public static final SwerveDriveKinematics driveKinematics = new SwerveDriveKinematics(
                 new Translation2d(ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2),
                 new Translation2d(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2),
