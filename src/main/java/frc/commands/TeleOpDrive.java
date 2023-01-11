@@ -17,7 +17,7 @@ public class TeleOpDrive extends CommandBase {
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public TeleOpDrive(Drivetrain drivetrain,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Double> rightY,
             Supplier<Boolean> fieldOrientedFunction) {
         this.drivetrain = drivetrain;
         this.xSpdFunction = xSpdFunction;
