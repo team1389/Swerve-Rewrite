@@ -113,6 +113,21 @@ public class Vision extends SubsystemBase {
         } 
     }
 
+    /**
+     * Estimates the pose of the robot in the field coordinate system, given the id of the fiducial, the robot relative to the
+     * camera, and the target relative to the camera.
+     * @param tagPose Pose3d the field relative pose of the target
+     * @param robotToCamera Transform3d of the robot relative to the camera. Origin of the robot is defined as the center.
+     * @param cameraToTarget Transform3d of the target relative to the camera, returned by PhotonVision
+     * @return Pose Robot position relative to the field.
+    */
+
+
+    public Pose3d getFieldToRobot(Pose3d tagPose, Transform3d robotToCamera, Transform3d cameraToTarget) {
+ 	    return tagPose.plus(cameraToTarget.inverse()).plus(robotToCamera.inverse()); 
+    }
+
+
     public void stop() {
        
     }

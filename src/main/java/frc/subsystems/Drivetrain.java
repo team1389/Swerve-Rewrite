@@ -50,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.driveKinematics,
             new Rotation2d(0), getModulePositions());
     
-    private final Field2d m_field = new Field2d();
+    private final Field2d field = new Field2d();
 
 
     // We want to reset gyro on boot, but the gyro takes a bit to start, so wait one sec then do it (in seperate thread)
@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
             }
         }).start();
 
-        SmartDashboard.putData("Field", m_field);
+        SmartDashboard.putData("Field", field);
     }
 
     public void zeroHeading() {
@@ -80,7 +80,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     // Position of the robot
-    public Pose2d getPose() {
+    public Pose2d getOdometryPose() {
         return odometer.getPoseMeters();
     }
 
@@ -88,12 +88,16 @@ public class Drivetrain extends SubsystemBase {
         odometer.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
+    public void setFieldPose(Pose2d pose) {
+        field.setRobotPose(pose);
+    }
+
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), getModulePositions());
-        m_field.setRobotPose(odometer.getPoseMeters());
+        setFieldPose(odometer.getPoseMeters());
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        SmartDashboard.putString("Robot Location", getOdometryPose().getTranslation().toString());
     }
 
     public void stopModules() {
@@ -112,6 +116,7 @@ public class Drivetrain extends SubsystemBase {
             backLeft.getPosition()
         };
     }
+
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         // Normalize to within robot max speed
