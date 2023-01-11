@@ -1,5 +1,6 @@
 package frc.subsystems;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.apriltag.AprilTagPoseEstimator;
-import edu.wpi.first.apriltag.AprilTagPoseEstimator.Config;
+
 
 
 import edu.wpi.first.math.Pair;
@@ -27,6 +26,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -43,9 +43,9 @@ public class Vision extends SubsystemBase {
             new AprilTag(01,
                         new Pose3d(new Pose2d(0.0, fieldWidth / 2.0, Rotation2d.fromDegrees(0.0))));
     List<AprilTag> atList = new ArrayList<AprilTag>();   
-    AprilTagFieldLayout aprilTagFieldLayout;   
+    public AprilTagFieldLayout aprilTagFieldLayout;   
 
-    Transform3d robotToCamTransformation = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0));//Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+    public final Transform3d robotToCamTransformation = new Transform3d(new Translation3d(-0.197, -0.368, 0.235), new Rotation3d(0,0,90));//Cam mounted facing left, 0.197 meters behind center, 0.368 meters left of center, 0.235 meters above center
 
     boolean hasTarget = false;
 
@@ -57,8 +57,14 @@ public class Vision extends SubsystemBase {
     public Vision() {
         getPipelineResult();
 
+        SmartDashboard.putBoolean("Has target", hasTarget);
+
         atList.add(tag01);
-        aprilTagFieldLayout = new AprilTagFieldLayout(atList, fieldLength, fieldWidth);
+        try {
+            aprilTagFieldLayout = new AprilTagFieldLayout("2023-chargedup.json");
+        } catch (IOException e) {
+            aprilTagFieldLayout = new AprilTagFieldLayout(atList, fieldLength, fieldWidth);
+        }
 
         camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
         camList.add(new Pair<PhotonCamera, Transform3d>(camera, robotToCamTransformation));
@@ -89,6 +95,15 @@ public class Vision extends SubsystemBase {
     
     }
 
+    public Transform3d getCameraToTarget() {
+        getTarget();
+
+        if(result.hasTargets()) {
+            return bestTarget.getBestCameraToTarget();
+        }
+        return new Transform3d();
+    }
+
     public boolean hasTargets() {
         getPipelineResult();
         return result.hasTargets();
@@ -113,8 +128,22 @@ public class Vision extends SubsystemBase {
         } 
     }
 
+    /**
+     * Estimates the pose of the robot in the field coordinate system, given the id of the fiducial, the robot relative to the
+     * camera, and the target relative to the camera.
+     * @param tagPose Pose3d the field relative pose of the target
+     * @param robotToCamera Transform3d of the robot relative to the camera. Origin of the robot is defined as the center.
+     * @param cameraToTarget Transform3d of the target relative to the camera, returned by PhotonVision
+     * @return Pose Robot position relative to the field.
+    */
+
+
+    public Pose3d getFieldToRobot(Pose3d tagPose, Transform3d robotToCamera, Transform3d cameraToTarget) {
+ 	    return tagPose.plus(cameraToTarget.inverse()).plus(robotToCamera.inverse()); 
+    }
+
     public void stop() {
-       
+
     }
 
     
