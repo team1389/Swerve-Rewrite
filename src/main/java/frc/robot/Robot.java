@@ -3,6 +3,7 @@ package frc.robot;
 
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.util.SwerveTelemetry;
 
@@ -13,12 +14,21 @@ public class Robot extends TimedRobot {
 
 
     private OI oi;
+    // SwerveTelemetry frontLeftTelemetry = new SwerveTelemetry(oi.drivetrain.frontLeft);
+    // SwerveTelemetry backLeftTelemetry = new SwerveTelemetry(oi.drivetrain.backLeft);
+    // SwerveTelemetry frontRightTelemetry = new SwerveTelemetry(oi.drivetrain.frontRight);
+    // SwerveTelemetry backRightTelemetry = new SwerveTelemetry(oi.drivetrain.backRight);
 
 
     @Override
     public void robotInit() {
         
         oi = new OI();
+
+        //frontLeftTelemetry = new SwerveTelemetry(oi.drivetrain.frontLeft);
+        //backLeftTelemetry = new SwerveTelemetry(oi.drivetrain.backLeft);
+        //frontRightTelemetry = new SwerveTelemetry(oi.drivetrain.frontRight);
+        //backRightTelemetry = new SwerveTelemetry(oi.drivetrain.backRight);
     }
 
     /**
@@ -51,6 +61,9 @@ public class Robot extends TimedRobot {
         SwerveTelemetry frontRightTelemetry = new SwerveTelemetry(oi.drivetrain.frontRight);
         SwerveTelemetry backRightTelemetry = new SwerveTelemetry(oi.drivetrain.backRight);
         //SendableRegistry.add(frontLeftTelemetry, "Swerve");
+
+        //SmartDashboard.putNumber("FL angular", frontLeftTelemetry.get);
+       
         SendableRegistry.addLW(frontLeftTelemetry, "FL Swerve");
         SendableRegistry.addLW(backLeftTelemetry, "BL Swerve");
         SendableRegistry.addLW(frontRightTelemetry, "FR Swerve");
@@ -66,6 +79,18 @@ public class Robot extends TimedRobot {
      * This function is called periodically during test mode.
      */
     @Override
-    public void testPeriodic() {
+    public void testInit() {
+        SwerveTelemetry frontLeftTelemetry = new SwerveTelemetry(oi.drivetrain.frontLeft);
+        SwerveTelemetry backLeftTelemetry = new SwerveTelemetry(oi.drivetrain.backLeft);
+        SwerveTelemetry frontRightTelemetry = new SwerveTelemetry(oi.drivetrain.frontRight);
+        SwerveTelemetry backRightTelemetry = new SwerveTelemetry(oi.drivetrain.backRight);
+        //SendableRegistry.add(frontLeftTelemetry, "Swerve");
+
+        
+       
+        SendableRegistry.addLW(frontLeftTelemetry, "FL Swerve");
+        SendableRegistry.addLW(backLeftTelemetry, "BL Swerve");
+        SendableRegistry.addLW(frontRightTelemetry, "FR Swerve");
+        SendableRegistry.addLW(backRightTelemetry, "BR Swerve");
     }
 }

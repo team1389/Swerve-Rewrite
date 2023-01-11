@@ -10,7 +10,9 @@ public class SwerveTelemetry implements Sendable {
 
     public SwerveTelemetry(SwerveModule wheel) {
         swerveWheel = wheel;
-        SendableRegistry.addChild(this, swerveWheel.driveMotor);
+        SendableRegistry.addLW(this, "joe");
+
+
     }
 
     @Override
