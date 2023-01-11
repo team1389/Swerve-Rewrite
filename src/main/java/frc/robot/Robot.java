@@ -69,6 +69,14 @@ public class Robot extends TimedRobot {
         // SendableRegistry.addLW(frontRightTelemetry, "FR Swerve");
         // SendableRegistry.addLW(backRightTelemetry, "BR Swerve");
 
+        oi.drivetrain.frontLeft.resetEncoders();
+        oi.drivetrain.backLeft.resetEncoders();
+        oi.drivetrain.frontRight.resetEncoders();
+        oi.drivetrain.backRight.resetEncoders();
+    }
+
+    @Override
+    public void teleopPeriodic() {
         SmartDashboard.putNumber("FL angle", frontLeftTelemetry.getAngle());
         SmartDashboard.putNumber("FL abs", frontLeftTelemetry.getAbsAngle());
 
@@ -81,10 +89,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("BR angle", backRightTelemetry.getAngle());
         SmartDashboard.putNumber("BR abs", backRightTelemetry.getAbsAngle());
 
-        oi.drivetrain.frontLeft.resetEncoders();
-        oi.drivetrain.backLeft.resetEncoders();
-        oi.drivetrain.frontRight.resetEncoders();
-        oi.drivetrain.backRight.resetEncoders();
     }
 
     /**

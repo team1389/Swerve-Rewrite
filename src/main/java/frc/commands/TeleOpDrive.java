@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap.DriveConstants;
 import frc.subsystems.Drivetrain;
@@ -65,6 +66,10 @@ public class TeleOpDrive extends CommandBase {
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        SmartDashboard.putNumber("FR target", moduleStates[0].angle.getDegrees());
+        SmartDashboard.putNumber("FL target", moduleStates[1].angle.getDegrees());
+        SmartDashboard.putNumber("FR target", moduleStates[2].angle.getDegrees());
+        SmartDashboard.putNumber("FL target", moduleStates[3].angle.getDegrees());
 
         // 6. Output all module states to wheels
         drivetrain.setModuleStates(moduleStates);
