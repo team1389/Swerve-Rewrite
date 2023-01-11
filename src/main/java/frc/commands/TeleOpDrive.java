@@ -52,6 +52,9 @@ public class TeleOpDrive extends CommandBase {
         xSpeed = xLimiter.calculate(xSpeed * DriveConstants.MAX_METERS_PER_SEC);
         ySpeed = yLimiter.calculate(ySpeed * DriveConstants.MAX_METERS_PER_SEC);
         turningSpeed = turningLimiter.calculate(turningSpeed * DriveConstants.MAX_RADIANS_PER_SEC);
+        // xSpeed = xSpeed * DriveConstants.MAX_METERS_PER_SEC;
+        // ySpeed = ySpeed * DriveConstants.MAX_METERS_PER_SEC;
+        // turningSpeed = turningSpeed * DriveConstants.MAX_RADIANS_PER_SEC;
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;

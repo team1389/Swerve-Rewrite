@@ -52,6 +52,9 @@ public class SwerveModule {
         // Let the controller know it's a circle and going past pi loops to -pi
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
+        // Braking mode
+        driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         // At boot reset relative encoders to absolute
         resetEncoders();
     }
@@ -94,7 +97,7 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState state) {
         // If the speed is 0 (basically if the driver isn't touching joystick) don't snap motors to 0 degrees
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        if (Math.abs(state.speedMetersPerSecond) < 0.05) {
             stop();
             return;
         }

@@ -17,9 +17,9 @@ public class OI {
         // Cool new way to make a drive command by passing in Suppliers for the joysticks
         drivetrain.setDefaultCommand(new TeleOpDrive(
             drivetrain,
-            () -> driveController.getLeftX(),
             () -> -driveController.getLeftY(),
-            () -> driveController.getRightX(),
+            () -> -driveController.getLeftX(),
+            () -> -driveController.getRightX(),
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
         //drivetrain.setDefaultCommand(new Test(drivetrain, 0.5, 0, 0));

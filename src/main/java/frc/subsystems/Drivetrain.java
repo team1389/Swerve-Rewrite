@@ -117,9 +117,10 @@ public class Drivetrain extends SubsystemBase {
         // Normalize to within robot max speed
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.MAX_METERS_PER_SEC);
         
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
+        frontRight.setDesiredState(desiredStates[0]);
+        frontLeft.setDesiredState(desiredStates[1]);
+        backRight.setDesiredState(desiredStates[2]);
+        backLeft.setDesiredState(desiredStates[3]);
+        
     }
 }
