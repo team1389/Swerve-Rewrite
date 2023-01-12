@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-    public PhotonCamera camera = new PhotonCamera("Microsoft Lifecam HD-3000");
+    public PhotonCamera camera = new PhotonCamera("Microsoft_LifeCam_HD-300");
     public PhotonPipelineResult result;
     public PhotonTrackedTarget bestTarget;
     public List<PhotonTrackedTarget> targets;

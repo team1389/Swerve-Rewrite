@@ -78,7 +78,7 @@ public class RobotMap {
         public static final double MAX_METERS_PER_SEC = 2.177; // m/s
         public static final double MAX_RADIANS_PER_SEC = 1.985; // rad/s
 
-        public static final double MAX_LINEAR_ACCEL = 0.9; // m/s/s
-        public static final double MAX_ANGULAR_ACCEL = 0.6; // rad/s/s
+        public static final double MAX_LINEAR_ACCEL = 1.9764367687980; // m/s/s
+        public static final double MAX_ANGULAR_ACCEL = 2.857556435467; // rad/s/s
     }
 }

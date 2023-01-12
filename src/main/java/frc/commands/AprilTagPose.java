@@ -63,6 +63,7 @@ public class AprilTagPose extends CommandBase {
             fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
 
             drivetrain.setFieldPose(fieldRelative2dPose);
+            System.out.println("TEST");
             
         }
              
