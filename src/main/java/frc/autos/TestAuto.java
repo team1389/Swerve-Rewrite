@@ -21,7 +21,7 @@ public class TestAuto extends SequentialCommandGroup {
         // 1. Create trajectory settings
         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
             AutoConstants.AUTO_MAX_METERS_PER_SEC,
-            DriveConstants.MAX_LINEAR_ACCEL)
+            AutoConstants.AUTO_MAX_MPSS)
             .setKinematics(DriveConstants.driveKinematics);
 
         // 2. Generate trajectory (manually for now, add pathplanner later)
@@ -37,7 +37,7 @@ public class TestAuto extends SequentialCommandGroup {
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
                 new Translation2d(1, 0)),
-            new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
+            new Pose2d(2, 0, Rotation2d.fromDegrees(179)),
             trajectoryConfig);
 
         // 3. Define PID controllers for tracking trajectory

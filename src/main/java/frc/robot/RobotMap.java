@@ -76,25 +76,27 @@ public class RobotMap {
         public static final boolean BR_ABS_REVERSED = false;
 
         // The physical max if motors go full speed
-        public static final double MAX_METERS_PER_SEC = 2.177; // m/s
-        public static final double MAX_RADIANS_PER_SEC = 1.985; // rad/s
+        public static final double MAX_METERS_PER_SEC = 2.53874834758734; // m/s
+        public static final double MAX_RADIANS_PER_SEC = 2.5; // rad/s
 
-        public static final double MAX_LINEAR_ACCEL = 2; // m/s/s
-        public static final double MAX_ANGULAR_ACCEL = 2.857556435467; // rad/s/s
+        public static final double MAX_LINEAR_ACCEL = 2.4567; // m/s/s
+        public static final double MAX_ANGULAR_ACCEL = 4; // rad/s/s
     }
 
     public static final class AutoConstants {
         // For now keep auto speeds half of teleop
-        public static final double AUTO_MAX_METERS_PER_SEC = DriveConstants.MAX_METERS_PER_SEC / 2;
+        public static final double AUTO_MAX_METERS_PER_SEC = 2.15;
         public static final double AUTO_MAX_RADIANS_PER_SEC = DriveConstants.MAX_RADIANS_PER_SEC / 2;
-        public static final double P_AUTO_X = 1.5;
-        public static final double P_AUTO_Y = 1.5;
+        public static final double AUTO_MAX_MPSS = 1.3;
+        public static final double AUTO_MAX_ANGULAR_ACCEL = 2.1;
+        public static final double P_AUTO_X = 1;
+        public static final double P_AUTO_Y = 1;
         public static final double P_AUTO_THETA = 3;
 
         public static final TrapezoidProfile.Constraints THETA_CONTROL_PROFILE = 
             new TrapezoidProfile.Constraints(
                     AUTO_MAX_RADIANS_PER_SEC,
-                    DriveConstants.MAX_ANGULAR_ACCEL);
+                    AUTO_MAX_ANGULAR_ACCEL);
     }
 
     public static final class FieldConstants {
