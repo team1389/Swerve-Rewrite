@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.commands.TeleOpDrive;
 import frc.commands.Test;
 import frc.autos.TestAuto;
-import frc.commands.AprilTagPose;
+import frc.commands.AprilTagPoseEstimisation;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Vision;
 
@@ -37,7 +37,7 @@ public class OI {
         // Press right bumper -> zero gyro heading
         driveRightBumper.onTrue(new InstantCommand(()->drivetrain.zeroHeading()));
 
-        vision.setDefaultCommand(new AprilTagPose(vision, drivetrain));
+        vision.setDefaultCommand(new AprilTagPoseEstimisation(vision, drivetrain));
     }
 
     /**
