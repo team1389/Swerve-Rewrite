@@ -96,4 +96,11 @@ public class RobotMap {
                     AUTO_MAX_RADIANS_PER_SEC,
                     DriveConstants.MAX_ANGULAR_ACCEL);
     }
+
+    public static final class FieldConstants {
+        public static final double FIELD_WIDTH = 100;
+        public static final double FIELD_LENGTH = 100;
+
+
+    }
 }

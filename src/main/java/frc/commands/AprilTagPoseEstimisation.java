@@ -17,7 +17,7 @@ import frc.robot.RobotMap.DriveConstants;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Vision;
 
-public class AprilTagPose extends CommandBase {
+public class AprilTagPoseEstimisation extends CommandBase {
     public Vision vision;
     public Drivetrain drivetrain;
     public PhotonTrackedTarget target;
@@ -35,7 +35,7 @@ public class AprilTagPose extends CommandBase {
     Transform3d cameraToTarget;
 
     
-    public AprilTagPose(Vision vision, Drivetrain drivetrain) {
+    public AprilTagPoseEstimisation(Vision vision, Drivetrain drivetrain) {
         this.vision = vision;
         this.drivetrain = drivetrain;
         addRequirements(vision);
@@ -51,20 +51,21 @@ public class AprilTagPose extends CommandBase {
     @Override
     public void execute() {
     
-        vision.getPipelineResult();
         if(vision.hasTargets()) {
-            target = vision.getTarget();
             cameraToTarget = vision.getCameraToTarget();
 
-            fieldRelative3dPose = vision.getFieldToRobot(tag01Pose, robotToCamera, cameraToTarget);
-            xTranslation = fieldRelative3dPose.getX();
-            yTranslation = fieldRelative3dPose.getY();
-            angle = fieldRelative3dPose.getRotation().getAngle();
+            fieldRelative2dPose = vision.getEstimatedGlobalPose(drivetrain.getPose()).getFirst();
 
-            fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
+            SmartDashboard.putString("2D POSE", fieldRelative2dPose.toString());
+            // fieldRelative3dPose = vision.getFieldToRobot(tag01Pose, robotToCamera, cameraToTarget);
+            // xTranslation = fieldRelative3dPose.getX();
+            // yTranslation = fieldRelative3dPose.getY();
+            // angle = fieldRelative3dPose.getRotation().getAngle();
+
+            // fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
             // drivetrain.setFieldPose(fieldRelative2dPose);
 
-            drivetrain.setFieldPose(vision.getEstimatedGlobalPose(drivetrain.getPose()).getFirst());
+            drivetrain.setFieldPose(fieldRelative2dPose);
 
             
         }

@@ -1,6 +1,7 @@
 package frc.subsystems;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +17,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 
-
-
+import frc.robot.RobotMap.DriveConstants;
+import frc.robot.RobotMap.FieldConstants;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -36,12 +37,10 @@ public class Vision extends SubsystemBase {
     public PhotonPipelineResult result;
     public PhotonTrackedTarget bestTarget;
     public List<PhotonTrackedTarget> targets;
-    public double fieldLength = 10; // meters
-    public double fieldWidth = 10;
 
     final AprilTag tag01 =
             new AprilTag(01,
-                        new Pose3d(new Pose2d(0.0, fieldWidth / 2.0, Rotation2d.fromDegrees(0.0))));
+                        new Pose3d(new Pose2d(0.0, FieldConstants.FIELD_WIDTH / 2.0, Rotation2d.fromDegrees(0.0))));
     List<AprilTag> atList = new ArrayList<AprilTag>();   
     public AprilTagFieldLayout aprilTagFieldLayout;   
 
@@ -62,13 +61,13 @@ public class Vision extends SubsystemBase {
         try {
             aprilTagFieldLayout = new AprilTagFieldLayout("2023-chargedup.json");
         } catch (IOException e) {
-            aprilTagFieldLayout = new AprilTagFieldLayout(atList, fieldLength, fieldWidth);
+            aprilTagFieldLayout = new AprilTagFieldLayout(atList, FieldConstants.FIELD_LENGTH, FieldConstants.FIELD_WIDTH);
         }
 
         camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
         camList.add(new Pair<PhotonCamera, Transform3d>(camera, robotToCamTransformation));
         
-        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
+        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
     }
 
     public void getPipelineResult() {
@@ -76,7 +75,6 @@ public class Vision extends SubsystemBase {
     }
 
     public PhotonTrackedTarget getTarget() {
-        getPipelineResult();
         if(hasTargets()) {
             bestTarget = result.getBestTarget();
             targets = result.getTargets();
@@ -85,9 +83,7 @@ public class Vision extends SubsystemBase {
     }
 
     public int getFiducialID() {
-        getTarget();
-
-        if(result.hasTargets()) {
+        if(hasTargets()) {
             return bestTarget.getFiducialId();
         }
         return 0;
@@ -95,17 +91,20 @@ public class Vision extends SubsystemBase {
     }
 
     public Transform3d getCameraToTarget() {
-        getTarget();
-
-        if(result.hasTargets()) {
+        if(hasTargets()) {
             return bestTarget.getBestCameraToTarget();
         }
         return new Transform3d();
     }
 
     public boolean hasTargets() {
-        getPipelineResult();
         return result.hasTargets();
+    }
+
+    public void periodic() {
+        getTarget();
+
+        SmartDashboard.putBoolean("hasTarget", hasTargets());
     }
 
     /**
