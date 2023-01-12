@@ -1,6 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.commands.TeleOpDrive;
 import frc.commands.Test;
 import frc.commands.AprilTagPose;
@@ -13,6 +16,7 @@ public class OI {
     public final Vision vision = new Vision();
 
     private XboxController driveController;
+    private Trigger driveRightBumper;
 
     public OI() {
         initControllers();
@@ -26,7 +30,9 @@ public class OI {
             () -> -driveController.getRightY(),
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
-        //drivetrain.setDefaultCommand(new Test(drivetrain, 0.5, 0, 0));
+
+        driveRightBumper.onTrue(new InstantCommand(()->drivetrain.zeroHeading()));
+        
         vision.setDefaultCommand(new AprilTagPose(vision, drivetrain));
     }
 
@@ -35,6 +41,7 @@ public class OI {
      */
     private void initControllers() {
         driveController = new XboxController(0);
+        driveRightBumper = new JoystickButton(driveController, XboxController.Button.kRightBumper.value);
     }
 
 
