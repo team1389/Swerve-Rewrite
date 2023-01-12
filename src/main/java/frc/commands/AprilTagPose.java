@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotMap.DriveConstants;
 import frc.subsystems.Drivetrain;
@@ -44,6 +45,7 @@ public class AprilTagPose extends CommandBase {
     public void initialize() {
         tag01Pose = vision.aprilTagFieldLayout.getTagPose(1).get();
         robotToCamera = vision.robotToCamTransformation;
+
     }
 
     @Override
@@ -63,7 +65,7 @@ public class AprilTagPose extends CommandBase {
             fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
 
             drivetrain.setFieldPose(fieldRelative2dPose);
-            System.out.println("TEST");
+
             
         }
              

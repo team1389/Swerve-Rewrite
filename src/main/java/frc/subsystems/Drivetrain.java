@@ -95,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), getModulePositions());
-        // m_field.setRobotPose(odometer.getPoseMeters());
+        
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }

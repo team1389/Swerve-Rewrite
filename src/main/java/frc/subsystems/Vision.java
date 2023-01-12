@@ -52,7 +52,6 @@ public class Vision extends SubsystemBase {
     ArrayList<Pair<PhotonCamera, Transform3d>> camList;
     RobotPoseEstimator robotPoseEstimator;
     
-
     // Instatiate new module with given ports and inversions
     public Vision() {
         getPipelineResult();
