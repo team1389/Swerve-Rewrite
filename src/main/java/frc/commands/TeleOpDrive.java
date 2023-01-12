@@ -43,6 +43,9 @@ public class TeleOpDrive extends CommandBase {
 
     @Override
     public void execute() {
+        // 0. push desired angle to smart dashboard
+        SmartDashboard.putNumber("Desired Angle", desiredAngle);
+        
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
         double ySpeed = ySpdFunction.get();
