@@ -4,6 +4,7 @@ package frc.robot;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.util.SwerveTelemetry;
 
@@ -14,6 +15,7 @@ public class Robot extends TimedRobot {
 
 
     private OI oi;
+    private Command autoCommand;
     SwerveTelemetry frontLeftTelemetry;
     SwerveTelemetry backLeftTelemetry;
     SwerveTelemetry frontRightTelemetry;
@@ -44,7 +46,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        //Example of setting auto: Scheduler.getInstance().add(YOUR AUTO);
+        // Setting auto
+        autoCommand = oi.getAutoCommand();
+
+        if(autoCommand != null) {
+            autoCommand.schedule();
+        }
     }
 
     /**
