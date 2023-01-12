@@ -88,10 +88,14 @@ public class Drivetrain extends SubsystemBase {
         odometer.resetPosition(getRotation2d(), getModulePositions(), pose);
     }
 
+    public void setFieldPose(Pose2d pose) {
+        m_field.setRobotPose(pose);
+    }
+
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), getModulePositions());
-        m_field.setRobotPose(odometer.getPoseMeters());
+        // m_field.setRobotPose(odometer.getPoseMeters());
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
@@ -123,4 +127,5 @@ public class Drivetrain extends SubsystemBase {
         backLeft.setDesiredState(desiredStates[3]);
         
     }
+
 }
