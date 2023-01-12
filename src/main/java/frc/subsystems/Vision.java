@@ -44,18 +44,16 @@ public class Vision extends SubsystemBase {
     List<AprilTag> atList = new ArrayList<AprilTag>();   
     public AprilTagFieldLayout aprilTagFieldLayout;   
 
-    public final Transform3d robotToCamTransformation = new Transform3d(new Translation3d(-0.197, -0.368, 0.235), new Rotation3d(0,0,90));//Cam mounted facing left, 0.197 meters behind center, 0.368 meters left of center, 0.235 meters above center
+    public final Transform3d robotToCamTransformation = new Transform3d(new Translation3d(0, -0.368, 0.35), new Rotation3d(0,0,1.571));//Cam mounted facing left, 0.197 meters behind center, 0.368 meters left of center, 0.235 meters above center
 
     boolean hasTarget = false;
 
     ArrayList<Pair<PhotonCamera, Transform3d>> camList;
-    RobotPoseEstimator robotPoseEstimator;
+    public RobotPoseEstimator robotPoseEstimator;
     
     // Instatiate new module with given ports and inversions
     public Vision() {
         getPipelineResult();
-
-        SmartDashboard.putBoolean("Has target", hasTarget);
 
         atList.add(tag01);
         try {
@@ -67,7 +65,7 @@ public class Vision extends SubsystemBase {
         camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
         camList.add(new Pair<PhotonCamera, Transform3d>(camera, robotToCamTransformation));
         
-        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, camList);
+        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY, camList);
     }
 
     public void getPipelineResult() {
@@ -75,7 +73,7 @@ public class Vision extends SubsystemBase {
     }
 
     public PhotonTrackedTarget getTarget() {
-        if(hasTargets()) {
+        if(hasTarget()) {
             bestTarget = result.getBestTarget();
             targets = result.getTargets();
         }
@@ -83,7 +81,7 @@ public class Vision extends SubsystemBase {
     }
 
     public int getFiducialID() {
-        if(hasTargets()) {
+        if(hasTarget()) {
             return bestTarget.getFiducialId();
         }
         return 0;
@@ -91,20 +89,23 @@ public class Vision extends SubsystemBase {
     }
 
     public Transform3d getCameraToTarget() {
-        if(hasTargets()) {
+        if(hasTarget()) {
             return bestTarget.getBestCameraToTarget();
         }
         return new Transform3d();
     }
 
-    public boolean hasTargets() {
-        return result.hasTargets();
+    public boolean hasTarget() {
+        hasTarget = result.hasTargets();
+        SmartDashboard.putBoolean("hasTarget", hasTarget);
+        return hasTarget;
     }
 
     public void periodic() {
         getTarget();
+        hasTarget();
+        robotPoseEstimator.update();
 
-        SmartDashboard.putBoolean("hasTarget", hasTargets());
     }
 
     /**
@@ -122,6 +123,7 @@ public class Vision extends SubsystemBase {
             return new Pair<Pose2d, Double>(
                     result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
         } else {
+            System.out.println("RESULT IS NOT PRESENT");
             return new Pair<Pose2d, Double>(null, 0.0);
         } 
     }
