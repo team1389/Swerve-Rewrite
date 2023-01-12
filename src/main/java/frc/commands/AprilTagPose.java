@@ -61,10 +61,10 @@ public class AprilTagPose extends CommandBase {
             yTranslation = fieldRelative3dPose.getY();
             angle = fieldRelative3dPose.getRotation().getAngle();
 
-            
             fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
+            // drivetrain.setFieldPose(fieldRelative2dPose);
 
-            drivetrain.setFieldPose(fieldRelative2dPose);
+            drivetrain.setFieldPose(vision.getEstimatedGlobalPose(drivetrain.getPose()).getFirst());
 
             
         }

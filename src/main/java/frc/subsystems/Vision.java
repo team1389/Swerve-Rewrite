@@ -136,7 +136,6 @@ public class Vision extends SubsystemBase {
      * @return Pose Robot position relative to the field.
     */
 
-
     public Pose3d getFieldToRobot(Pose3d tagPose, Transform3d robotToCamera, Transform3d cameraToTarget) {
  	    return tagPose.plus(cameraToTarget.inverse()).plus(robotToCamera.inverse()); 
     }
