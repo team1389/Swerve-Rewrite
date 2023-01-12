@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -20,7 +21,7 @@ public class RobotMap {
         public static final double TURNING_ROTATIONS_TO_RAD = TURN_GEAR_RATIO * 2 * Math.PI;
         public static final double DRIVE_RPM_TO_METERS_PER_SEC = DRIVE_ROTATIONS_TO_METERS / 60;
         public static final double TURNING_RPM_TO_RAD_PER_SEC = TURNING_ROTATIONS_TO_RAD / 60;
-        public static final double P_TURNING = 0.5; // PID constant TODO: Tune this
+        public static final double P_TURNING = 0.5; // PID constant 
     }
 
     // All the overall constants for the drivetrain
@@ -78,7 +79,28 @@ public class RobotMap {
         public static final double MAX_METERS_PER_SEC = 2.177; // m/s
         public static final double MAX_RADIANS_PER_SEC = 1.985; // rad/s
 
-        public static final double MAX_LINEAR_ACCEL = 1.9764367687980; // m/s/s
+        public static final double MAX_LINEAR_ACCEL = 2; // m/s/s
         public static final double MAX_ANGULAR_ACCEL = 2.857556435467; // rad/s/s
+    }
+
+    public static final class AutoConstants {
+        // For now keep auto speeds half of teleop
+        public static final double AUTO_MAX_METERS_PER_SEC = DriveConstants.MAX_METERS_PER_SEC / 2;
+        public static final double AUTO_MAX_RADIANS_PER_SEC = DriveConstants.MAX_RADIANS_PER_SEC / 2;
+        public static final double P_AUTO_X = 1.5;
+        public static final double P_AUTO_Y = 1.5;
+        public static final double P_AUTO_THETA = 3;
+
+        public static final TrapezoidProfile.Constraints THETA_CONTROL_PROFILE = 
+            new TrapezoidProfile.Constraints(
+                    AUTO_MAX_RADIANS_PER_SEC,
+                    DriveConstants.MAX_ANGULAR_ACCEL);
+    }
+
+    public static final class FieldConstants {
+        public static final double FIELD_WIDTH = 100;
+        public static final double FIELD_LENGTH = 100;
+
+
     }
 }

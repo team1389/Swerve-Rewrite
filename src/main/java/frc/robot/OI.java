@@ -1,9 +1,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.commands.TeleOpDrive;
 import frc.commands.Test;
-import frc.commands.AprilTagPose;
+import frc.autos.TestAuto;
+import frc.commands.AprilTagPoseEstimisation;
 import frc.subsystems.Drivetrain;
 import frc.subsystems.Vision;
 
@@ -13,6 +19,7 @@ public class OI {
     public final Vision vision = new Vision();
 
     private XboxController driveController;
+    private Trigger driveRightBumper;
 
     public OI() {
         initControllers();
@@ -23,10 +30,14 @@ public class OI {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX(),
+            () -> -driveController.getRightY(),
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
-        //drivetrain.setDefaultCommand(new Test(drivetrain, 0.5, 0, 0));
-        vision.setDefaultCommand(new AprilTagPose(vision, drivetrain));
+
+        // Press right bumper -> zero gyro heading
+        driveRightBumper.onTrue(new InstantCommand(()->drivetrain.zeroHeading()));
+
+        vision.setDefaultCommand(new AprilTagPoseEstimisation(vision, drivetrain));
     }
 
     /**
@@ -34,7 +45,14 @@ public class OI {
      */
     private void initControllers() {
         driveController = new XboxController(0);
+        driveRightBumper = new JoystickButton(driveController, XboxController.Button.kRightBumper.value);
     }
 
+    // Return autocommand
+    public Command getAutoCommand() {
+        SequentialCommandGroup testAuto = new TestAuto(drivetrain);
+
+        return testAuto;
+    }
 
 }

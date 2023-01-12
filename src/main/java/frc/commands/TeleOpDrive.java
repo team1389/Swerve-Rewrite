@@ -18,7 +18,7 @@ public class TeleOpDrive extends CommandBase {
     private double desiredAngle; // gyro value from getHeading() the robot wants to point at
 
     public TeleOpDrive(Drivetrain drivetrain,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Double> rightY,
             Supplier<Boolean> fieldOrientedFunction) {
         this.drivetrain = drivetrain;
         this.xSpdFunction = xSpdFunction;
