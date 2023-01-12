@@ -15,6 +15,7 @@ public class TeleOpDrive extends CommandBase {
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private double desiredAngle; // gyro value from getHeading() the robot wants to point at
 
     public TeleOpDrive(Drivetrain drivetrain,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
@@ -29,6 +30,10 @@ public class TeleOpDrive extends CommandBase {
         this.xLimiter = new SlewRateLimiter(DriveConstants.MAX_LINEAR_ACCEL);
         this.yLimiter = new SlewRateLimiter(DriveConstants.MAX_LINEAR_ACCEL);
         this.turningLimiter = new SlewRateLimiter(DriveConstants.MAX_ANGULAR_ACCEL);
+
+        this.desiredAngle = drivetrain.getHeading();
+        
+
         addRequirements(drivetrain);
     }
 
