@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -8,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.commands.TeleOpDrive;
 import frc.commands.Test;
+import frc.robot.RobotMap.AutoConstants;
 import frc.autos.TestAuto;
 import frc.commands.AprilTagPoseEstimisation;
 import frc.subsystems.Drivetrain;
@@ -50,9 +55,14 @@ public class OI {
 
     // Return autocommand
     public Command getAutoCommand() {
-        SequentialCommandGroup testAuto = new TestAuto(drivetrain);
+        PathPlannerTrajectory trajectory = PathPlanner.loadPath("Test Path", new PathConstraints(
+            AutoConstants.AUTO_MAX_METERS_PER_SEC, 
+            AutoConstants.AUTO_MAX_MPSS)
+        );
 
-        return testAuto;
+        Command trajCommand = drivetrain.followTrajectoryCommand(trajectory, true);
+
+        return trajCommand;
     }
 
 }
