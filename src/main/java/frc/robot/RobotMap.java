@@ -100,8 +100,8 @@ public class RobotMap {
     }
 
     public static final class FieldConstants {
-        public static final double FIELD_WIDTH = 100;
-        public static final double FIELD_LENGTH = 100;
+        public static final double FIELD_WIDTH = 8.2296;
+        public static final double FIELD_LENGTH = 16.4592;;
 
 
     }

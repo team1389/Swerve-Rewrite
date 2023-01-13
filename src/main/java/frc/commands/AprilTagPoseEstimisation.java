@@ -24,7 +24,12 @@ public class AprilTagPoseEstimisation extends CommandBase {
 
     Pose3d tag01Pose;
     Pose3d fieldRelative3dPose;
+
     Pose2d fieldRelative2dPose;
+    Pose2d estimatedFieldRelative2dPose;
+
+
+    Pose2d drivetrainPose;
 
     double xTranslation;
     double yTranslation;
@@ -50,23 +55,23 @@ public class AprilTagPoseEstimisation extends CommandBase {
 
     @Override
     public void execute() {
-    
-        if(vision.hasTargets()) {
+        if(vision.hasTarget()) {
             cameraToTarget = vision.getCameraToTarget();
+            drivetrainPose = drivetrain.getPose();
 
-            fieldRelative2dPose = vision.getEstimatedGlobalPose(drivetrain.getPose()).getFirst();
+            estimatedFieldRelative2dPose = vision.getEstimatedGlobalPose(drivetrainPose).getFirst();
 
-            SmartDashboard.putString("2D POSE", fieldRelative2dPose.toString());
-            // fieldRelative3dPose = vision.getFieldToRobot(tag01Pose, robotToCamera, cameraToTarget);
-            // xTranslation = fieldRelative3dPose.getX();
-            // yTranslation = fieldRelative3dPose.getY();
-            // angle = fieldRelative3dPose.getRotation().getAngle();
+            if(estimatedFieldRelative2dPose != null) {
+                fieldRelative2dPose = estimatedFieldRelative2dPose;
+            }
+            else {
+                fieldRelative2dPose = new Pose2d();
+            }
 
-            // fieldRelative2dPose = new Pose2d(new Translation2d(xTranslation, yTranslation), new Rotation2d(angle));
-            // drivetrain.setFieldPose(fieldRelative2dPose);
+            SmartDashboard.putString("Drivetrain 2D POSE", drivetrainPose.toString());
+            SmartDashboard.putString("AT ESTIMATED 2D POSE", fieldRelative2dPose.toString());
 
-            //drivetrain.setFieldPose(fieldRelative2dPose);
-
+            drivetrain.setFieldPose(fieldRelative2dPose);
             
         }
              

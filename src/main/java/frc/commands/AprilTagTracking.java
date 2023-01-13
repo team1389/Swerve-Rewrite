@@ -28,7 +28,7 @@ public class AprilTagTracking extends CommandBase {
     public void execute() {
         // 1. 
         vision.getPipelineResult();
-        if(vision.hasTargets()) {
+        if(vision.hasTarget()) {
             target = vision.getTarget();
             System.out.println(target.getFiducialId());
         }
