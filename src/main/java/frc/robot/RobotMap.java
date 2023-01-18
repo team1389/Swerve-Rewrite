@@ -103,6 +103,5 @@ public class RobotMap {
         public static final double FIELD_WIDTH = 8.2296;
         public static final double FIELD_LENGTH = 16.4592;;
 
-
     }
 }

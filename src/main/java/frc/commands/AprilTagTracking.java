@@ -6,7 +6,6 @@ import org.photonvision.PhotonTargetSortMode;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotMap.DriveConstants;
 import frc.subsystems.Vision;
 
 public class AprilTagTracking extends CommandBase {

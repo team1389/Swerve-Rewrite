@@ -38,6 +38,8 @@ public class Vision extends SubsystemBase {
     public PhotonTrackedTarget bestTarget;
     public List<PhotonTrackedTarget> targets;
 
+    
+
     final AprilTag tag01 =
             new AprilTag(01,
                         new Pose3d(new Pose2d(0.0, FieldConstants.FIELD_WIDTH / 2.0, Rotation2d.fromDegrees(0.0))));
@@ -80,11 +82,11 @@ public class Vision extends SubsystemBase {
         return bestTarget;
     }
 
-    public int getFiducialID() {
+    public String getFiducialID() {
         if(hasTarget()) {
-            return bestTarget.getFiducialId();
+            return targets.toString();
         }
-        return 0;
+        return "";
     
     }
 
@@ -105,7 +107,6 @@ public class Vision extends SubsystemBase {
         getTarget();
         hasTarget();
         robotPoseEstimator.update();
-
     }
 
     /**
@@ -128,22 +129,8 @@ public class Vision extends SubsystemBase {
         } 
     }
 
-    /**
-     * Estimates the pose of the robot in the field coordinate system, given the id of the fiducial, the robot relative to the
-     * camera, and the target relative to the camera.
-     * @param tagPose Pose3d the field relative pose of the target
-     * @param robotToCamera Transform3d of the robot relative to the camera. Origin of the robot is defined as the center.
-     * @param cameraToTarget Transform3d of the target relative to the camera, returned by PhotonVision
-     * @return Pose Robot position relative to the field.
-    */
-
-    public Pose3d getFieldToRobot(Pose3d tagPose, Transform3d robotToCamera, Transform3d cameraToTarget) {
- 	    return tagPose.plus(cameraToTarget.inverse()).plus(robotToCamera.inverse()); 
-    }
-
     public void stop() {
 
     }
 
-    
 }
