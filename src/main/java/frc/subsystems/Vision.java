@@ -2,149 +2,65 @@ package frc.subsystems;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.management.AttributeList;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
-import org.photonvision.RobotPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-
-
-
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import org.photonvision.RobotPoseEstimator.PoseStrategy;
 
 public class Vision extends SubsystemBase {
-
     public PhotonCamera camera = new PhotonCamera("Microsoft Lifecam HD-3000");
-    public PhotonPipelineResult result;
-    public PhotonTrackedTarget bestTarget;
-    public List<PhotonTrackedTarget> targets;
-    public double fieldLength = 10; // meters
+    public double fieldLength = 10; // in meters
     public double fieldWidth = 10;
-
-    final AprilTag tag01 =
-            new AprilTag(01,
-                        new Pose3d(new Pose2d(0.0, fieldWidth / 2.0, Rotation2d.fromDegrees(0.0))));
-    List<AprilTag> atList = new ArrayList<AprilTag>();   
-    public AprilTagFieldLayout aprilTagFieldLayout;   
-
-    public final Transform3d robotToCamTransformation = new Transform3d(new Translation3d(-0.197, -0.368, 0.235), new Rotation3d(0,0,90));//Cam mounted facing left, 0.197 meters behind center, 0.368 meters left of center, 0.235 meters above center
-
-    boolean hasTarget = false;
-
+    public AprilTagFieldLayout aprilTagFieldLayout;
+    // Cam mounted facing left, 0.197 meters behind center, 0.368 meters left of
+    // center, 0.235 meters above center
+    public final Transform3d robotToCamTransformation = new Transform3d(new Translation3d(-0.197, -0.368, 0.235),
+            new Rotation3d(0, 0, 90));
     ArrayList<Pair<PhotonCamera, Transform3d>> camList;
-    RobotPoseEstimator robotPoseEstimator;
-    
+    private RobotPoseEstimator robotPoseEstimator;
 
-    // Instatiate new module with given ports and inversions
     public Vision() {
-        getPipelineResult();
 
-        SmartDashboard.putBoolean("Has target", hasTarget);
-
-        atList.add(tag01);
         try {
             aprilTagFieldLayout = new AprilTagFieldLayout("2023-chargedup.json");
         } catch (IOException e) {
-            aprilTagFieldLayout = new AprilTagFieldLayout(atList, fieldLength, fieldWidth);
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return;
         }
 
         camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
         camList.add(new Pair<PhotonCamera, Transform3d>(camera, robotToCamTransformation));
-        
-        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camList);
+
+        robotPoseEstimator = new RobotPoseEstimator(aprilTagFieldLayout, PoseStrategy.LOWEST_AMBIGUITY,
+                camList);
     }
 
-    public void getPipelineResult() {
-        result = camera.getLatestResult();
-    }
-
-    public PhotonTrackedTarget getTarget() {
-        getPipelineResult();
-        if(hasTargets()) {
-            bestTarget = result.getBestTarget();
-            targets = result.getTargets();
+    public void update() {
+        var posePair = robotPoseEstimator.update();
+        if (posePair.isEmpty()) {
+            return;
         }
-        return bestTarget;
-    }
 
-    public int getFiducialID() {
-        getTarget();
-
-        if(result.hasTargets()) {
-            return bestTarget.getFiducialId();
+        // pose3d, may be null
+        var pose = posePair.get().getFirst();
+        // convert to seconds
+        var latency = posePair.get().getSecond() / 1000;
+        if (pose == null) {
+            return; // no pose, we can do nothing
         }
-        return 0;
-    
-    }
 
-    public Transform3d getCameraToTarget() {
-        getTarget();
+        double time = System.currentTimeMillis() / 1000;
+        var targetTime = time - latency;
 
-        if(result.hasTargets()) {
-            return bestTarget.getBestCameraToTarget();
-        }
-        return new Transform3d();
-    }
-
-    public boolean hasTargets() {
-        getPipelineResult();
-        return result.hasTargets();
-    }
-
-    /**
-    * @param estimatedRobotPose The current best guess at robot pose. Pass the projected pose from the swerve odometry
-    * @return A pair of the fused camera observations to a single Pose2d on the field, and the time of the observation. 
-    *            Assumes a planar field and the robot is always firmly on the ground.
-    *
-    */
-    public Pair<Pose2d, Double> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        robotPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-
-        double currentTime = Timer.getFPGATimestamp();
-        Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();
-        if (result.isPresent()) {
-            return new Pair<Pose2d, Double>(
-                    result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
-        } else {
-            return new Pair<Pose2d, Double>(null, 0.0);
-        } 
-    }
-
-    /**
-     * Estimates the pose of the robot in the field coordinate system, given the id of the fiducial, the robot relative to the
-     * camera, and the target relative to the camera.
-     * @param tagPose Pose3d the field relative pose of the target
-     * @param robotToCamera Transform3d of the robot relative to the camera. Origin of the robot is defined as the center.
-     * @param cameraToTarget Transform3d of the target relative to the camera, returned by PhotonVision
-     * @return Pose Robot position relative to the field.
-    */
-
-
-    public Pose3d getFieldToRobot(Pose3d tagPose, Transform3d robotToCamera, Transform3d cameraToTarget) {
- 	    return tagPose.plus(cameraToTarget.inverse()).plus(robotToCamera.inverse()); 
-    }
-
-    public void stop() {
+        // TODO
 
     }
-
-    
 }

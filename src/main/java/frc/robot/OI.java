@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import frc.commands.AprilTagPose;
 import frc.commands.TeleOpDrive;
 import frc.commands.Test;
 import frc.subsystems.Drivetrain;
@@ -27,7 +26,7 @@ public class OI {
             () -> !driveController.getLeftBumper()) // By default be in field oriented
         );
         //drivetrain.setDefaultCommand(new Test(drivetrain, 0.5, 0, 0));
-        vision.setDefaultCommand(new AprilTagPose(vision, drivetrain));
+        // vision.setDefaultCommand(new AprilTagPose(vision, drivetrain));
     }
 
     /**
