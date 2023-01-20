@@ -43,7 +43,7 @@ public class Vision extends SubsystemBase {
                 camList);
     }
 
-    public void update() {
+    public void update(Drivetrain drivetrain) {
         var posePair = robotPoseEstimator.update();
         if (posePair.isEmpty()) {
             return;
@@ -51,16 +51,16 @@ public class Vision extends SubsystemBase {
 
         // pose3d, may be null
         var pose = posePair.get().getFirst();
-        // convert to seconds
-        var latency = posePair.get().getSecond() / 1000;
+        // in millisonds
+        double latency = posePair.get().getSecond();
         if (pose == null) {
             return; // no pose, we can do nothing
         }
 
-        double time = System.currentTimeMillis() / 1000;
-        var targetTime = time - latency;
+        long time = System.currentTimeMillis();
+        long targetTime = time - (long)latency;
 
-        // TODO
+        drivetrain.updatePosistion(pose.toPose2d(), targetTime);
 
     }
 }

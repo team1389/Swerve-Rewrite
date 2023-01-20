@@ -1,7 +1,6 @@
 package frc.subsystems;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
@@ -78,7 +77,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Returns degrees from -180 to 180
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        return gyro.getYaw();
     }
 
     public Rotation2d getRotation2d() {
@@ -134,5 +133,48 @@ public class Drivetrain extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+
+    public void updatePosistion(Pose2d knownLocation, long timeDetected) {
+        // find two points that are around the time
+        Pair<Pose2d, Long> first = new Pair<>(null, null);
+        Pair<Pose2d, Long> second = new Pair<>(null, null);
+
+        for (int i = positions.size() - 1; i <= 0; i--) {
+            var pos = positions.get(i);
+            if (first.getSecond() == null || pos.getSecond() - timeDetected <= 0) {
+                first = pos;
+                second = positions.get(i - 1);
+                break;
+            }
+        }
+        var currentEstimatedPose = positions.get(positions.size() - 1).getFirst();
+
+        if (first.getSecond() == null | second.getSecond() == null) {
+            return;
+        }
+
+        // interoplate between points
+        double timeBetween = first.getSecond() - second.getSecond();
+        double time = first.getSecond() - timeDetected;
+        double factor = time / timeBetween; // number between 0 and 1
+        double inverseFactor = 1 - factor;
+        var poseAtTime = add(first.getFirst().times(factor), second.getFirst().times(inverseFactor));
+        
+        // apply difference in location that occured b/c of latency
+        var currentPose = knownLocation.plus(currentEstimatedPose.minus(poseAtTime));
+
+        odometer.resetPosition(getRotation2d(), getModulePositions(), currentPose);
+    }
+
+    Pose2d add(Pose2d a, Pose2d b) {
+        var transA = a.getTranslation();
+        var transB = b.getTranslation();
+        var transOut = transA.plus(transB);
+
+        var rotA = a.getRotation();
+        var rotB = b.getRotation();
+        var rotOut = rotA.plus(rotB);
+        return new Pose2d(transOut, rotOut);
     }
 }
