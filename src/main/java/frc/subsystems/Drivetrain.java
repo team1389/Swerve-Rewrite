@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -50,8 +51,8 @@ public class Drivetrain extends SubsystemBase {
             DriveConstants.BR_ABS_REVERSED);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.driveKinematics,
-            new Rotation2d(0), getModulePositions());
+    private final SwerveDrivePoseEstimator odometer = new SwerveDrivePoseEstimator(DriveConstants.driveKinematics,
+            new Rotation2d(0), getModulePositions(), new Pose2d());
 
     private ArrayList<Pair<Pose2d, Long>> positions = new ArrayList<>();
 
@@ -86,11 +87,16 @@ public class Drivetrain extends SubsystemBase {
 
     // Position of the robot
     public Pose2d getOdometryPose() {
-        return odometer.getPoseMeters();
+        return odometer.getEstimatedPosition();
     }
 
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(), getModulePositions(), pose);
+    }
+
+    // Use with vision
+    public void setPoseWithLatency(Pose2d pose, double timeStampSeconds) {
+        odometer.addVisionMeasurement(pose, timeStampSeconds);
     }
 
     public void setFieldPose(Pose2d pose) {
@@ -99,9 +105,9 @@ public class Drivetrain extends SubsystemBase {
 
     @Override
     public void periodic() {
-        positions.add(Pair.of(odometer.getPoseMeters(), System.currentTimeMillis()));
+        positions.add(Pair.of(odometer.getEstimatedPosition(), System.currentTimeMillis()));
         odometer.update(getRotation2d(), getModulePositions());
-        setFieldPose(odometer.getPoseMeters());
+        setFieldPose(odometer.getEstimatedPosition());
 
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getOdometryPose().getTranslation().toString());
